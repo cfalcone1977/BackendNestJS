@@ -15,7 +15,7 @@ listarUsuarios(){
     return this.usuariosService.getAllUsuariosDB();
 }
 
-@Get('busquedaxNombre')
+@Get('buscarxNombre')
 buscarUsuarioxNombre(@Query('nombre')nombre:string){
     return this.usuariosService.buscarUsuarioxNombre(nombre);
 }
