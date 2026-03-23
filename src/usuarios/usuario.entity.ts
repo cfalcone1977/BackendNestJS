@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Provincia } from "src/provincia/entities/provincia.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("usuarios")
 export class Usuario{
-  
+
   @PrimaryGeneratedColumn()
   id:number
   @Column()
@@ -25,6 +26,9 @@ export class Usuario{
   id_codigo_referidos:number
   @Column() 
   id_rol:number
+  @ManyToOne(()=>Provincia)
+  @JoinColumn()
+  provincia:Provincia
 
 /*  
 constructor(dni_usuario:number,nombre:string, apellido:string,

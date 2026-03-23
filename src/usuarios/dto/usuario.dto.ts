@@ -1,4 +1,5 @@
 import {IsString, IsOptional, IsEmail, IsNumber} from "class-validator";
+import { Provincia } from "src/provincia/entities/provincia.entity";
 
 export class UsuarioDto {
   @IsNumber()
@@ -15,6 +16,8 @@ export class UsuarioDto {
   numero_telefono:string
   @IsString()  
   direccion: string
+  @IsNumber()
+  provincia: Provincia
   @IsNumber()
   id_perfilinv:number
   @IsNumber()
@@ -45,6 +48,9 @@ export class ModificarUsuarioDto{
   @IsString()
   @IsOptional()  
   direccion: string
+  @IsNumber()
+  @IsOptional()
+  provincia: Provincia
   @IsNumber()
   @IsOptional()
   id_perfilinv:number

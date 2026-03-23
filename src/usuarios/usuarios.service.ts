@@ -14,7 +14,9 @@ export class UsuariosService {
 
 
 async getAllUsuariosDB():Promise<ResponseDTO>{
-       const usuarios= await this.usuarioRepository.find();
+       const usuarios= await this.usuarioRepository.find({
+        relations: ['provincia']
+       });
        if (!usuarios.length) throw new NotFoundException("NO existen USUARIOS");
        return {                       
               code:HttpStatus.OK,
@@ -25,7 +27,11 @@ async getAllUsuariosDB():Promise<ResponseDTO>{
 
 async getUsuarioDBxID(id:number):Promise<ResponseDTO>{     
 
-       const usuario= await this.usuarioRepository.findOneBy( {id} );
+       const usuario= await this.usuarioRepository.findOne({
+        where: {id} ,
+        relations: ['provincia']
+        
+        });
                                                        //findOneBy({id});
                                                        //query(`SELECT * FROM usuarios Where id=${id}`)
        if (!usuario) throw new NotFoundException("NO existe USUARIO");  
@@ -73,7 +79,8 @@ async buscarUsuarioxNombre(nombreBuscar:string):Promise<ResponseDTO>{
     const res= await this.usuarioRepository.find({
         where:{
           nombre: Like(`%${nombreBuscar}%`)
-              }
+              },
+          relations: ['provincia']
         })
     if (!res.length) throw new NotFoundException('Criterio de Busqueda INEXISTENTE!');
     console.log(`Se encontraron ${res.length} registros para esta Busqueda`)
