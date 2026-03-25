@@ -5,12 +5,32 @@ import {v4} from "uuid";
 import { UsuarioDto, ModificarUsuarioDto } from './dto/usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
+import { LoginUsuarioDTO } from './dto/login-usuario.dto';
+import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
  
 export class UsuariosService {
   constructor(@InjectRepository(Usuario) private readonly usuarioRepository: Repository<Usuario>){}
+
+async login(loginUsuario:LoginUsuarioDTO):Promise<any>{
+    const {dni,contraseña}= loginUsuario;
+    const usuarioLogeado= await this.usuarioRepository.findOne({
+        where:{
+          dni_usuario: dni
+              }
+    }
+    )
+    if (!usuarioLogeado){
+                   return "Usuario NO AUTENTICADO";
+                        }
+    if (usuarioLogeado){
+                 if (usuarioLogeado.contraseña===contraseña){
+                                                       return "Usuario AUTENTICADO";
+                                                            } else return "Contraseña INVALIDA";
+                       }
+}
 
 
 async getAllUsuariosDB():Promise<ResponseDTO>{
@@ -45,8 +65,13 @@ async getUsuarioDBxID(id:number):Promise<ResponseDTO>{
 }
 
 async crearUsuario(usuario:UsuarioDto):Promise<ResponseDTO>{
-   const nuevoUsuario= this.usuarioRepository.create(usuario);
-   const res=await this.usuarioRepository.save(usuario);
+   const nivelHashs=10;
+   const hashContraseña= await bcrypt.hash(usuario.contraseña,nivelHashs);
+   const nuevoUsuario= this.usuarioRepository.create({
+    ...usuario,
+    contraseña: hashContraseña,
+   });
+   const res=await this.usuarioRepository.save(nuevoUsuario);
    console.log(`Usuario: ${res.nombre} ${res.apellido} con ID: ${res.id} RESGISTRADO!`);
    return { 
      code: HttpStatus.CREATED,
@@ -67,6 +92,11 @@ async eliminarUsuario(id:number):Promise<ResponseDTO>{
   
 }
 async modificarUsuario(id:number, modificaciones:ModificarUsuarioDto):Promise<ResponseDTO>{
+   const {contraseña}=modificaciones;
+   if (contraseña){
+                console.log("tiene contraseña",contraseña);
+                  }
+   
    const res= await this.usuarioRepository.update(id, modificaciones);
    if (!res.affected) throw new NotFoundException(`ID:${id} o Usuario inexistente!!, NO SE ACTUALIZO usuario`);
    return {
@@ -80,7 +110,7 @@ async buscarUsuarioxNombre(nombreBuscar:string):Promise<ResponseDTO>{
         where:{
           nombre: Like(`%${nombreBuscar}%`)
               },
-          relations: ['provincia']
+        relations: ['provincia']
         })
     if (!res.length) throw new NotFoundException('Criterio de Busqueda INEXISTENTE!');
     console.log(`Se encontraron ${res.length} registros para esta Busqueda`)

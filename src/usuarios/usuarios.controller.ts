@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestj
 import {UsuariosService} from "./usuarios.service";
 import {type Response} from 'express';
 import { ModificarUsuarioDto, UsuarioDto } from './dto/usuario.dto';
+import { LoginUsuarioDTO } from './dto/login-usuario.dto';
 
 
 
@@ -9,6 +10,11 @@ import { ModificarUsuarioDto, UsuarioDto } from './dto/usuario.dto';
 @Controller('usuarios')
 export class UsuariosController {
   constructor(private usuariosService: UsuariosService){}
+
+@Post('login')
+login(@Body() loginUsuario:LoginUsuarioDTO){
+  return this.usuariosService.login(loginUsuario);
+}
 
 @Get()    
 listarUsuarios(){
