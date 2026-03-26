@@ -26,7 +26,10 @@ async login(loginUsuario:LoginUsuarioDTO):Promise<any>{
                    return "Usuario NO AUTENTICADO";
                         }
     if (usuarioLogeado){
-                 if (usuarioLogeado.contraseña===contraseña){
+                 console.log(usuarioLogeado);
+                 const matchean:boolean=await bcrypt.compare(contraseña,usuarioLogeado.contraseña);
+                 if (matchean) {
+                 //if (usuarioLogeado.contraseña===contraseña){
                                                        return "Usuario AUTENTICADO";
                                                             } else return "Contraseña INVALIDA";
                        }
@@ -95,6 +98,9 @@ async modificarUsuario(id:number, modificaciones:ModificarUsuarioDto):Promise<Re
    const {contraseña}=modificaciones;
    if (contraseña){
                 console.log("tiene contraseña",contraseña);
+                const nivelHashs=10;
+                const hashContraseña= await bcrypt.hash(contraseña,nivelHashs);
+                modificaciones.contraseña=hashContraseña;
                   }
    
    const res= await this.usuarioRepository.update(id, modificaciones);
