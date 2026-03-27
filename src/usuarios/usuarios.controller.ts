@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common';
 import {UsuariosService} from "./usuarios.service";
 import {type Response} from 'express';
 import { ModificarUsuarioDto, UsuarioDto } from './dto/usuario.dto';
@@ -12,6 +12,7 @@ export class UsuariosController {
   constructor(private usuariosService: UsuariosService){}
 
 @Post('login')
+@HttpCode(200)
 login(@Body() loginUsuario:LoginUsuarioDTO){
   return this.usuariosService.login(loginUsuario);
 }

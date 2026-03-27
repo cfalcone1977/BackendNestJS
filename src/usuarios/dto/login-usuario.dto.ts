@@ -9,5 +9,4 @@ export class LoginUsuarioDTO{
   @IsNotEmpty()
   @IsString()
   contraseña:string;
-
 }
