@@ -110,7 +110,6 @@ export class UsuariosService {
       const hashContraseña = await bcrypt.hash(contraseña, nivelHashs);
       modificaciones.contraseña = hashContraseña;
     }
-
     const res = await this.usuarioRepository.update(id, modificaciones);
     if (!res.affected)
       throw new NotFoundException(
