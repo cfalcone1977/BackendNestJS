@@ -4,6 +4,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import {TypeOrmModule} from '@nestjs/typeorm'
 import { Usuario } from './usuarios/usuario.entity';
 import { ProvinciaModule } from './provincia/provincia.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [ConfigModule.forRoot(),TypeOrmModule.forRoot({
     type:'mysql',
@@ -19,7 +20,7 @@ import { ProvinciaModule } from './provincia/provincia.module';
     database:'LIBERTYFINANCE',*/
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: false
-  }), UsuariosModule, ProvinciaModule],
+  }), UsuariosModule, ProvinciaModule, AuthModule],
   controllers: [],
   providers: [],
 })

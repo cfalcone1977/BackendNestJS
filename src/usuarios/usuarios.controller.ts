@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } fr
 import {UsuariosService} from "./usuarios.service";
 import {type Response} from 'express';
 import { ModificarUsuarioDto, UsuarioDto } from './dto/usuario.dto';
-import { LoginUsuarioDTO } from './dto/login-usuario.dto';
+//import { LoginUsuarioDTO } from '../auth/dto/login-usuario.dto';
 
 
 
@@ -11,11 +11,12 @@ import { LoginUsuarioDTO } from './dto/login-usuario.dto';
 export class UsuariosController {
   constructor(private usuariosService: UsuariosService){}
 
+  /*
 @Post('login')
 @HttpCode(200)
 login(@Body() loginUsuario:LoginUsuarioDTO){
   return this.usuariosService.login(loginUsuario);
-}
+}*/
 
 @Get()    
 listarUsuarios(){

@@ -26,8 +26,8 @@ export class Usuario{
   id_codigo_referidos:number
   @Column() 
   id_rol:number
-  @ManyToOne(()=>Provincia)
-  @JoinColumn()
-  provincia:Provincia
+  @ManyToOne(()=>Provincia,{nullable:false})       //@ManyToOne(()=>Provincia)
+  @JoinColumn({name:'id_provincia'})
+  provincia:Provincia 
 }
 

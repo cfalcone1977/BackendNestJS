@@ -10,7 +10,7 @@ import { v4 } from 'uuid';
 import { UsuarioDto, ModificarUsuarioDto } from './dto/usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
-import { LoginUsuarioDTO } from './dto/login-usuario.dto';
+import { LoginUsuarioDTO } from '../auth/dto/login-usuario.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -20,12 +20,14 @@ export class UsuariosService {
     private readonly usuarioRepository: Repository<Usuario>,
   ) {}
 
+
+ /* 
   async login(loginUsuario: LoginUsuarioDTO):Promise<ResponseDTO> {
     const { dni, contraseña } = loginUsuario;
     const usuarioLogeado = await this.usuarioRepository.findOne({
       where: {
         dni_usuario: dni,
-      },
+      },relations: ['provincia']
     });
     if (!usuarioLogeado) throw new UnauthorizedException("Usuario NO AUTENTICADO");
       else {
@@ -41,7 +43,7 @@ export class UsuariosService {
         };
       } else throw new UnauthorizedException("Contraseña INVALIDA");
     }
-  }
+  }*/
 
   async getAllUsuariosDB(): Promise<ResponseDTO> {
     const usuarios = await this.usuarioRepository.find({
@@ -69,6 +71,16 @@ export class UsuariosService {
       message: 'Lectura de Usuario Exitosa',
       data: usuario,
     };
+  }
+
+    async getUsuarioDBxDNI(dni_usuario: number): Promise<UsuarioDto> {
+    const usuario = await this.usuarioRepository.findOne({
+      where: { dni_usuario },
+      relations: ['provincia'],
+    });
+    if (!usuario) throw new NotFoundException('NO existe USUARIO');
+
+    return usuario;
   }
 
   async crearUsuario(usuario: UsuarioDto): Promise<ResponseDTO> {
