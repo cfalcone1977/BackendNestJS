@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import {UsuariosService} from "./usuarios.service";
 import {type Response} from 'express';
 import { ModificarUsuarioDto, UsuarioDto } from './dto/usuario.dto';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
 //import { LoginUsuarioDTO } from '../auth/dto/login-usuario.dto';
 
 
@@ -18,6 +19,7 @@ login(@Body() loginUsuario:LoginUsuarioDTO){
   return this.usuariosService.login(loginUsuario);
 }*/
 
+@UseGuards(AuthGuard)
 @Get()    
 listarUsuarios(){
     return this.usuariosService.getAllUsuariosDB();
