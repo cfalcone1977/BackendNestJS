@@ -37,6 +37,7 @@ export class AuthService {
           //payload
           dni: usuarioLogeado.dni_usuario,
           mail: usuarioLogeado.mail,
+          id_rol: usuarioLogeado.id_rol,
         };
         const datos_encriptados = await this.jwtService.signAsync(datosLlave, {
           secret: process.env.JWT_SECRET,

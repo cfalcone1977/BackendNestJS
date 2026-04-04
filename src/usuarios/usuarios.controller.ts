@@ -1,14 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, UseGuards, SetMetadata } from '@nestjs/common';
 import {UsuariosService} from "./usuarios.service";
 import {type Response} from 'express';
 import { ModificarUsuarioDto, UsuarioDto } from './dto/usuario.dto';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { RolesGuard } from 'src/auth/guard/auth.roles';
 //import { LoginUsuarioDTO } from '../auth/dto/login-usuario.dto';
 
-
+export const Roles = (...roles: number[]) => SetMetadata('roles', roles);
 
 
 @Controller('usuarios')
+@UseGuards(AuthGuard, RolesGuard)
 export class UsuariosController {
   constructor(private usuariosService: UsuariosService){}
 
@@ -19,8 +21,9 @@ login(@Body() loginUsuario:LoginUsuarioDTO){
   return this.usuariosService.login(loginUsuario);
 }*/
 
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Get()    
+@Roles(1)
 listarUsuarios(){
     return this.usuariosService.getAllUsuariosDB();
 }

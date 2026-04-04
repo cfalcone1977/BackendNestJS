@@ -20,6 +20,7 @@ export class AuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException ("Token Inexistente");
     const datos_encriptados= await this.jwtService.verifyAsync(token, {secret: process.env.JWT_SECRET});
     console.log(datos_encriptados);
+    request['usuario']=datos_encriptados; //asigno datos encriptados a request
     if (datos_encriptados) return true;
     throw new UnauthorizedException("Token no Autorizado");
   }
